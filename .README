@@ -1,0 +1,6 @@
+This code is a short snipet of manual image arrays in python.
+    1. Grayscale
+    2. Invert
+    3. Threshold
+    4. Applying blur
+    5. Apply sharpen
