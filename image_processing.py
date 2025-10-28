@@ -1,5 +1,6 @@
 from PIL import Image
 import numpy as np
+import cv2
 
 
 class image_classifier():
@@ -18,10 +19,29 @@ class image_classifier():
     
     def invert (self): # independent on the self.image
         inverted = 255 -self.image
-        return inverted.astype(np.unit8)
+        return inverted.astype(np.uint8)
     
     def threshold(self, value):
-        pass
-
-
- 
+        binary = np.where(self.image > value, 255, 0)
+        return binary.astype(np.uint8)
+    
+    def apply_blur(self, kernel_size =3):
+        blurred = cv2.blur(self.image, (kernel_size, kernel_size))
+        return blurred.astype(np.uint8)
+    
+    def apply_sharpen(self):
+        kernel = np.array([[0, -1, 0],
+                       [-1, 5, -1],
+                       [0, -1, 0]])
+        sharpened = cv2.filter2D(self.image, -1, kernel)
+        return sharpened.astype(np.uint8)
+        
+    def save_image(self, filepath, image_array=None):
+        if image_array is None:
+            image_array = self.image
+        img = Image.fromarray(image_array)
+        img.save(filepath)
+        
+processor = image_classifier("TestImage.jpg")
+processor.load_image()
+processor.save_image('gray.jpg', processor.grayscale())
